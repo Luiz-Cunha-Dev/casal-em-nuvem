@@ -179,7 +179,7 @@ export default function DirectUpload({ onUploadComplete, onUploadError }: Direct
         className={`flex justify-center items-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer transition-all duration-300
           ${isDragging ? "border-green-400 bg-green-50" : "border-gray-300 hover:border-green-400 hover:bg-gray-50"}`}
       >
-        <label htmlFor="file-upload" className="flex flex-col items-center justify-center w-full h-full text-center">
+        <label htmlFor="file-upload" className="flex flex-col items-center justify-center w-full h-full text-center p-2">
           <div className="relative">
             <FiUploadCloud className={`w-12 h-12 ${isDragging ? 'text-green-500' : 'text-gray-400'} transition-colors`} />
           </div>
