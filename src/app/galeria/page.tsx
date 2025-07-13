@@ -21,6 +21,7 @@ export default function GalleryPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedImage, setSelectedImage] = useState<ImageFile | null>(null);
   const [downloadingAll, setDownloadingAll] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
   
   // Estados para paginação
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,6 +55,16 @@ export default function GalleryPage() {
 
   useEffect(() => {
     fetchImages();
+    
+    // Detectar tamanho da tela
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
   const downloadImage = async (image: ImageFile) => {
@@ -328,67 +339,140 @@ export default function GalleryPage() {
             
             {/* Pagination Controls */}
             {totalPages > 1 && (
-              <div className="flex justify-center items-center gap-2 mt-8">
-                <button
-                  onClick={() => setCurrentPage(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
-                    currentPage === 1 
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 cursor-pointer'
-                  }`}
-                >
-                  <FiArrowLeft className="w-4 h-4" />
-                  Anterior
-                </button>
-                
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                    // Mostrar apenas algumas páginas ao redor da página atual
-                    if (
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= currentPage - 2 && page <= currentPage + 2)
-                    ) {
-                      return (
-                        <button
-                          key={page}
-                          onClick={() => setCurrentPage(page)}
-                          className={`w-10 h-10 rounded-lg transition-colors cursor-pointer ${
-                            page === currentPage
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      );
-                    } else if (
-                      page === currentPage - 3 ||
-                      page === currentPage + 3
-                    ) {
-                      return (
-                        <span key={page} className="px-2 text-gray-400">
-                          ...
-                        </span>
-                      );
-                    }
-                    return null;
-                  })}
+              <div className="flex flex-col items-center gap-3 mt-8">
+                {/* Informação da página atual (mobile) */}
+                <div className="sm:hidden text-sm text-gray-600">
+                  Página {currentPage} de {totalPages}
                 </div>
                 
-                <button
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
-                    currentPage === totalPages 
-                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 cursor-pointer'
-                  }`}
-                >
-                  Próxima
-                  <FiArrowLeft className="w-4 h-4 rotate-180" />
-                </button>
+                {/* Container principal dos botões */}
+                <div className="flex justify-center items-center gap-2">
+                  {/* Botão Anterior */}
+                  <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors text-sm sm:text-base ${
+                      currentPage === 1 
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 cursor-pointer'
+                    }`}
+                  >
+                    <FiArrowLeft className="w-4 h-4" />
+                    <span className="hidden sm:inline">Anterior</span>
+                    <span className="sm:hidden">Ant</span>
+                  </button>
+                  
+                  {/* Números das páginas - Desktop */}
+                  <div className="hidden sm:flex items-center gap-1">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                      // Em telas maiores, mostrar mais páginas
+                      const range = isLargeScreen ? 3 : 2;
+                      
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - range && page <= currentPage + range)
+                      ) {
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`w-10 h-10 rounded-lg transition-colors cursor-pointer text-sm ${
+                              page === currentPage
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      } else if (
+                        page === currentPage - (range + 1) ||
+                        page === currentPage + (range + 1)
+                      ) {
+                        return (
+                          <span key={page} className="px-2 text-gray-400 text-sm">
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
+                  
+                  {/* Navegação simplificada para mobile */}
+                  <div className="flex sm:hidden items-center gap-1">
+                    {/* Primeira página */}
+                    {currentPage > 2 && (
+                      <>
+                        <button
+                          onClick={() => setCurrentPage(1)}
+                          className="w-8 h-8 rounded-lg transition-colors cursor-pointer text-sm bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                        >
+                          1
+                        </button>
+                        {currentPage > 3 && (
+                          <span className="px-1 text-gray-400 text-xs">...</span>
+                        )}
+                      </>
+                    )}
+                    
+                    {/* Página anterior */}
+                    {currentPage > 1 && (
+                      <button
+                        onClick={() => setCurrentPage(currentPage - 1)}
+                        className="w-8 h-8 rounded-lg transition-colors cursor-pointer text-sm bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                      >
+                        {currentPage - 1}
+                      </button>
+                    )}
+                    
+                    {/* Página atual */}
+                    <button className="w-8 h-8 rounded-lg bg-blue-600 text-white text-sm font-medium">
+                      {currentPage}
+                    </button>
+                    
+                    {/* Próxima página */}
+                    {currentPage < totalPages && (
+                      <button
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        className="w-8 h-8 rounded-lg transition-colors cursor-pointer text-sm bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                      >
+                        {currentPage + 1}
+                      </button>
+                    )}
+                    
+                    {/* Última página */}
+                    {currentPage < totalPages - 1 && (
+                      <>
+                        {currentPage < totalPages - 2 && (
+                          <span className="px-1 text-gray-400 text-xs">...</span>
+                        )}
+                        <button
+                          onClick={() => setCurrentPage(totalPages)}
+                          className="w-8 h-8 rounded-lg transition-colors cursor-pointer text-sm bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                        >
+                          {totalPages}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  
+                  {/* Botão Próxima */}
+                  <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-colors text-sm sm:text-base ${
+                      currentPage === totalPages 
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 cursor-pointer'
+                    }`}
+                  >
+                    <span className="hidden sm:inline">Próxima</span>
+                    <span className="sm:hidden">Prox</span>
+                    <FiArrowLeft className="w-4 h-4 rotate-180" />
+                  </button>
+                </div>
               </div>
             )}
           </div>
