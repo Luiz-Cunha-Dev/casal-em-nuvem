@@ -230,7 +230,7 @@ export default function DirectUpload({ onUploadComplete, onUploadError }: Direct
                   <button
                     type="button"
                     onClick={() => removeFile(index)}
-                    className="text-red-500 hover:text-red-700 p-1"
+                    className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
                     disabled={isUploading}
                   >
                     <FiX className="w-4 h-4" />
@@ -277,7 +277,7 @@ export default function DirectUpload({ onUploadComplete, onUploadError }: Direct
         <button
           onClick={handleUploadAll}
           disabled={files.length === 0 || isUploading || files.every(f => f.status === 'success')}
-          className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-md text-base"
+          className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-md text-base cursor-pointer"
         >
           {isUploading ? (
             <span className="flex items-center justify-center">
