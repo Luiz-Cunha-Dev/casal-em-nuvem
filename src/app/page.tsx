@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FiUploadCloud, FiImage, FiCheck, FiZap } from "react-icons/fi";
+import { FiUploadCloud, FiImage } from "react-icons/fi";
 import Link from "next/link";
 import Image from "next/image";
 import DirectUpload from "@/components/DirectUpload";
@@ -24,10 +24,6 @@ export default function Home() {
           <p className="text-gray-600 text-lg font-normal">
             Envie suas fotos diretamente para o Oracle Cloud
           </p>
-          <div className="mt-4 inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
-            <FiZap className="w-4 h-4" />
-            Upload direto - Sem passar pelo servidor
-          </div>
         </div>
 
         {/* Componente de upload direto múltiplo */}
@@ -57,9 +53,6 @@ export default function Home() {
                     height={96}
                     className="w-full h-24 object-cover rounded-lg border border-gray-200"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
-                    <FiCheck className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                  </div>
                 </div>
               ))}
             </div>
