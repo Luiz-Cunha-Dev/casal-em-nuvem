@@ -178,42 +178,44 @@ export default function GalleryPage() {
             </div>
             
             {/* Controls */}
-            <div className="flex items-center gap-2 flex-wrap justify-center">
+            <div className="flex items-center gap-1 sm:gap-2 flex-wrap justify-center">
               <button
                 onClick={fetchImages}
-                className="flex items-center gap-2 px-4 py-2 bg-white/90 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-white/90 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer text-sm sm:text-base"
               >
-                <FiRefreshCw className="w-4 h-4" />
-                Atualizar
+                <FiRefreshCw className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">Atualizar</span>
+                <span className="sm:hidden">Att</span>
               </button>
               
               {images.length > 0 && (
                 <button
                   onClick={downloadAllImages}
                   disabled={downloadingAll}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors cursor-pointer ${
+                  className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg border transition-colors cursor-pointer text-sm sm:text-base ${
                     downloadingAll 
                       ? 'bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed' 
                       : 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700'
                   }`}
                 >
-                  <FiDownload className="w-4 h-4" />
-                  {downloadingAll ? 'Baixando...' : 'Baixar Todas'}
+                  <FiDownload className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="hidden sm:inline">{downloadingAll ? 'Baixando...' : 'Baixar Todas'}</span>
+                  <span className="sm:hidden">{downloadingAll ? 'Baixando...' : 'Download'}</span>
                 </button>
               )}
               
               <div className="flex bg-white/90 rounded-lg border border-gray-300 overflow-hidden">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`p-1.5 sm:p-2 transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
                 >
-                  <FiGrid className="w-4 h-4" />
+                  <FiGrid className="w-3 h-3 sm:w-4 sm:h-4" />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
+                  className={`p-1.5 sm:p-2 transition-colors cursor-pointer ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-50'}`}
                 >
-                  <FiList className="w-4 h-4" />
+                  <FiList className="w-3 h-3 sm:w-4 sm:h-4" />
                 </button>
               </div>
             </div>
