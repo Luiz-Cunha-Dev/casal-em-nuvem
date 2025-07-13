@@ -1,103 +1,172 @@
-import Image from "next/image";
+"use client";
+
+import { useState, DragEvent } from "react";
+import { FiUploadCloud, FiImage } from "react-icons/fi";
+import Link from "next/link";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [file, setFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    if (event.dataTransfer.files && event.dataTransfer.files[0]) {
+      setFile(event.dataTransfer.files[0]);
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!file) {
+      setUploadMessage("Por favor, selecione um arquivo.");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadMessage("Enviando arquivo...");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        setUploadMessage("Arquivo enviado com sucesso!");
+        setFile(null);
+      } else {
+        const data = await response.json();
+        setUploadMessage(data.error || "Erro ao enviar o arquivo. Tente novamente.");
+      }
+    } catch (error) {
+      console.error(error);
+      setUploadMessage("Erro ao enviar o arquivo. Tente novamente.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50 p-4 sm:p-8">
+      <div className="w-full max-w-lg bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-rose-100 p-8 space-y-8">
+        <div className="text-center">
+          <div className="mb-4">
+            <div className="text-6xl mb-2">💕</div>
+          </div>
+          <h1 className="text-4xl font-serif font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+            Compartilhe Conosco
+          </h1>
+          <p className="text-rose-700 mt-3 text-lg font-light">
+            Envie suas fotos especiais do nosso grande dia
+          </p>
+          <div className="flex justify-center mt-4 space-x-2">
+            <span className="text-2xl">🌸</span>
+            <span className="text-2xl">💐</span>
+            <span className="text-2xl">🌸</span>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div
+            onDragEnter={handleDragEnter}
+            onDragOver={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`flex justify-center items-center w-full h-72 border-3 border-dashed rounded-2xl cursor-pointer transition-all duration-300 transform hover:scale-[1.02]
+              ${isDragging ? "border-rose-400 bg-rose-50 shadow-lg" : "border-rose-200 hover:border-rose-300 hover:bg-rose-25"}`}
+          >
+            <label htmlFor="file-upload" className="flex flex-col items-center justify-center w-full h-full text-center">
+              <div className="relative">
+                <FiUploadCloud className={`w-16 h-16 ${isDragging ? 'text-rose-500' : 'text-rose-400'} transition-colors`} />
+                <div className="absolute -top-2 -right-2 text-2xl">✨</div>
+              </div>
+              <p className="mt-6 text-xl text-rose-800 font-medium">
+                <span className="font-bold">Arraste suas fotos aqui</span>
+              </p>
+              <p className="mt-2 text-lg text-rose-600">ou clique para selecionar</p>
+              <p className="mt-3 text-sm text-rose-500 bg-rose-50 px-4 py-2 rounded-full">
+                📸 PNG, JPG, GIF até 10MB
+              </p>
+              <input id="file-upload" name="file-upload" type="file" className="hidden" onChange={handleFileChange} />
+            </label>
+          </div>
+
+          {file && (
+            <div className="text-center p-4 bg-rose-50 rounded-2xl border border-rose-200">
+              <div className="text-3xl mb-2">📷</div>
+              <p className="text-rose-800 font-medium">
+                Arquivo selecionado: 
+                <span className="font-bold block mt-1 text-rose-900">{file.name}</span>
+              </p>
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={!file || isUploading}
+            className="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold py-4 px-6 rounded-2xl hover:from-rose-600 hover:to-pink-600 disabled:from-rose-300 disabled:to-pink-300 disabled:cursor-not-allowed transition-all duration-300 transform hover:scale-[1.02] shadow-lg text-lg"
+          >
+            {isUploading ? (
+              <span className="flex items-center justify-center">
+                <span className="animate-spin mr-2">💫</span>
+                Enviando com amor...
+              </span>
+            ) : (
+              <span className="flex items-center justify-center">
+                💕 Enviar Foto
+              </span>
+            )}
+          </button>
+        </form>
+
+        {uploadMessage && (
+          <div className={`mt-6 text-center p-4 rounded-2xl border ${
+            uploadMessage.includes("sucesso") 
+              ? "bg-green-50 border-green-200 text-green-800" 
+              : "bg-red-50 border-red-200 text-red-800"
+          }`}>
+            <div className="text-2xl mb-2">
+              {uploadMessage.includes("sucesso") ? "🎉" : "😔"}
+            </div>
+            <p className="font-medium text-lg">
+              {uploadMessage}
+            </p>
+          </div>
+        )}
+
+        {/* Link para a galeria */}
+        <div className="mt-6 text-center">
+          <Link 
+            href="/galeria"
+            className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm text-rose-700 font-medium py-3 px-6 rounded-2xl border border-rose-200 hover:bg-rose-50 hover:border-rose-300 transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+          >
+            <FiImage className="w-5 h-5" />
+            Ver nossa galeria de memórias 📸
+          </Link>
+        </div>
+      </div>
+    </main>
   );
 }

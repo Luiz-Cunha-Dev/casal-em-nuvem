@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💕 Site de Casamento - Upload de Fotos
 
-## Getting Started
+Um lindo site para casais compartilharem fotos do seu grande dia! Os convidados podem facilmente fazer upload de suas fotos, que são armazenadas de forma segura no Oracle Cloud Object Storage.
 
-First, run the development server:
+## ✨ Funcionalidades
+
+- 📤 Upload de fotos por drag & drop ou seleção
+- 🖼️ Suporte para JPG, PNG e GIF
+- ☁️ Armazenamento seguro no Oracle Cloud Object Storage
+- 📱 Design responsivo e moderno
+- 💕 Interface romântica e elegante
+
+## 🚀 Como usar
+
+### 1. Configuração do Oracle Cloud
+
+Antes de usar o site, você precisa configurar o Oracle Cloud Object Storage:
+
+1. **Siga o guia completo**: Consulte o arquivo `ORACLE_CLOUD_SETUP.md` para instruções detalhadas
+2. **Configure as variáveis**: Copie `.env.oracle.example` para `.env.local` e preencha com suas informações
+3. **Teste a configuração**: Execute `npm run test-oracle` para verificar se tudo está funcionando
+
+### 2. Executar o projeto
 
 ```bash
+# Instalar dependências
+npm install
+
+# Executar em modo desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Testar upload
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Após configurar o Oracle Cloud, teste o upload:
+- Acesse o site
+- Arraste uma foto ou clique para selecionar
+- Veja a magia acontecer! ✨
+
+## 🛠️ Scripts disponíveis
+
+- `npm run dev` - Executa o servidor de desenvolvimento
+- `npm run build` - Gera a build de produção
+- `npm run start` - Executa a versão de produção
+- `npm run test-oracle` - Testa a configuração do Oracle Cloud
+- `npm run lint` - Executa o linter
+
+## 🏗️ Tecnologias utilizadas
+
+- **Next.js 15** - Framework React
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS** - Estilização
+- **Oracle Cloud Object Storage** - Armazenamento de arquivos
+- **React Icons** - Ícones bonitos
+
+## 📁 Estrutura do projeto
+
+```
+src/
+├── app/
+│   ├── api/upload/         # API para upload de arquivos
+│   ├── oracle-config.ts    # Configuração do Oracle Cloud
+│   ├── page.tsx           # Página principal
+│   └── layout.tsx         # Layout base
+├── public/                # Arquivos estáticos
+test-oracle-config.js      # Script de teste da configuração
+ORACLE_CLOUD_SETUP.md     # Guia de configuração
+```
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Para aprender mais sobre as tecnologias utilizadas:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs) - documentação do Next.js
+- [Oracle Cloud Object Storage](https://docs.oracle.com/en-us/iaas/Content/Object/home.htm) - documentação do Oracle Cloud
+- [Tailwind CSS](https://tailwindcss.com/docs) - documentação do Tailwind
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Deploy
 
-## Deploy on Vercel
+O projeto pode ser deployed em qualquer plataforma que suporte Next.js:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Vercel** (recomendado)
+- **Netlify** 
+- **Oracle Cloud Infrastructure**
+- **AWS**
+- **Qualquer VPS**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+⚠️ **Importante**: Lembre-se de configurar as variáveis de ambiente na plataforma de deploy.
+
+## 📞 Suporte
+
+Se você encontrar problemas:
+
+1. Consulte o arquivo `ORACLE_CLOUD_SETUP.md`
+2. Execute `npm run test-oracle` para diagnóstico
+3. Verifique os logs do browser/servidor
