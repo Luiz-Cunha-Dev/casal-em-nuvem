@@ -40,28 +40,32 @@ export default function Home() {
         {/* Lista de imagens enviadas com sucesso */}
         {uploadedImages.length > 0 && (
           <div className="space-y-3">
-            <h4 className="font-medium text-gray-900">
-              Fotos enviadas com sucesso ({uploadedImages.length})
-            </h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {uploadedImages.map((url, index) => (
-                <div key={index} className="relative group">
-                  <Image
-                    src={url}
-                    alt={`Upload ${index + 1}`}
-                    width={150}
-                    height={96}
-                    className="w-full h-24 object-cover rounded-lg border border-gray-200"
-                  />
-                </div>
-              ))}
+            <div className="flex items-center justify-between">
+              <h4 className="font-medium text-gray-900">
+                Fotos enviadas com sucesso ({uploadedImages.length})
+              </h4>
+              <button
+                onClick={() => setUploadedImages([])}
+                className="text-sm text-gray-600 hover:text-gray-800 underline"
+              >
+                Limpar fotos enviadas
+              </button>
             </div>
-            <button
-              onClick={() => setUploadedImages([])}
-              className="text-sm text-gray-600 hover:text-gray-800 underline"
-            >
-              Limpar lista
-            </button>
+            <div className="max-h-64 overflow-y-auto border border-gray-200 rounded-lg p-2">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {uploadedImages.map((url, index) => (
+                  <div key={index} className="relative group">
+                    <Image
+                      src={url}
+                      alt={`Upload ${index + 1}`}
+                      width={150}
+                      height={96}
+                      className="w-full h-24 object-cover rounded-lg border border-gray-200"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 

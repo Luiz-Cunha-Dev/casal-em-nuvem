@@ -206,69 +206,75 @@ export default function DirectUpload({ onUploadComplete, onUploadError }: Direct
       {/* Lista de arquivos selecionados */}
       {files.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-lg font-medium text-gray-900 mb-3">
-            Arquivos selecionados ({files.length})
-          </h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium text-gray-900">
+              Arquivos selecionados ({files.length})
+            </h3>
+            <button
+              type="button"
+              onClick={() => setFiles([])}
+              className="text-sm text-gray-600 hover:text-gray-800 underline"
+              disabled={isUploading}
+            >
+              Limpar arquivos selecionados
+            </button>
+          </div>
           
-          {files.map((fileStatus, index) => (
-            <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
-              <div className="flex items-center space-x-3">
-                <FiImage className="w-5 h-5 text-gray-600" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">{fileStatus.file.name}</p>
-                  <p className="text-xs text-gray-500">
-                    {(fileStatus.file.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
-                  {fileStatus.status === 'error' && fileStatus.error && (
-                    <p className="text-xs text-red-600 mt-1">{fileStatus.error}</p>
-                  )}
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                {fileStatus.status === 'pending' && (
-                  <button
-                    type="button"
-                    onClick={() => removeFile(index)}
-                    className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
-                    disabled={isUploading}
-                  >
-                    <FiX className="w-4 h-4" />
-                  </button>
-                )}
-                
-                {fileStatus.status === 'uploading' && (
-                  <div className="flex items-center space-x-2">
-                    <FiLoader className="w-4 h-4 text-blue-500 animate-spin" />
-                    <div className="w-24 bg-blue-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${fileStatus.progress}%` }}
-                      />
-                    </div>
+          <div className="max-h-64 overflow-y-auto space-y-2 border border-gray-200 rounded-lg p-2">
+            {files.map((fileStatus, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <FiImage className="w-5 h-5 text-gray-600" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{fileStatus.file.name}</p>
+                    <p className="text-xs text-gray-500">
+                      {(fileStatus.file.size / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                    {fileStatus.status === 'error' && fileStatus.error && (
+                      <p className="text-xs text-red-600 mt-1">{fileStatus.error}</p>
+                    )}
                   </div>
-                )}
+                </div>
                 
-                {fileStatus.status === 'success' && (
-                  <FiCheck className="w-4 h-4 text-green-500" />
-                )}
-                
-                {fileStatus.status === 'error' && (
-                  <div className="flex items-center space-x-1">
-                    <FiX className="w-4 h-4 text-red-500" />
+                <div className="flex items-center space-x-2">
+                  {fileStatus.status === 'pending' && (
                     <button
                       type="button"
                       onClick={() => removeFile(index)}
-                      className="text-red-500 hover:text-red-700 text-xs"
+                      className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
                       disabled={isUploading}
                     >
-                      Remover
+                      <FiX className="w-4 h-4" />
                     </button>
-                  </div>
-                )}
+                  )}
+                  
+                  {fileStatus.status === 'uploading' && (
+                    <div className="flex items-center space-x-2">
+                      <FiLoader className="w-4 h-4 text-blue-500 animate-spin" />
+                    </div>
+                  )}
+                  
+                  {fileStatus.status === 'success' && (
+                    <FiCheck className="w-4 h-4 text-green-500" />
+                  )}
+                  
+                  {fileStatus.status === 'error' && (
+                    <div className="flex items-center space-x-1">
+                      <FiX className="w-4 h-4 text-red-500" />
+                      <button
+                        type="button"
+                        onClick={() => removeFile(index)}
+                        className="text-red-500 hover:text-red-700 text-xs"
+                        disabled={isUploading}
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
 
@@ -310,7 +316,7 @@ export default function DirectUpload({ onUploadComplete, onUploadError }: Direct
             onClick={() => setFiles(prev => prev.filter(f => f.status !== 'success'))}
             className="text-sm text-gray-600 hover:text-gray-800 underline"
           >
-            Limpar arquivos enviados com sucesso
+            Limpar apenas arquivos enviados
           </button>
         </div>
       )}
