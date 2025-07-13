@@ -63,11 +63,11 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    // Validar tamanho (10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    // Validar tamanho (20MB)
+    const maxSize = 20 * 1024 * 1024; // 20MB
     if (fileSize && fileSize > maxSize) {
       return NextResponse.json({ 
-        error: 'Arquivo muito grande. Máximo de 10MB permitido.' 
+        error: 'Arquivo muito grande. Máximo de 20MB permitido.' 
       }, { status: 400 });
     }
 

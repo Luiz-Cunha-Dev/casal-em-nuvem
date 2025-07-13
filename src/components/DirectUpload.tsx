@@ -188,7 +188,7 @@ export default function DirectUpload({ onUploadComplete, onUploadError }: Direct
           </p>
           <p className="mt-1 text-base text-gray-500">ou clique para selecionar várias fotos</p>
           <p className="mt-3 text-sm text-gray-400 bg-gray-100 px-3 py-1 rounded-md">
-            PNG, JPG, GIF até 10MB cada
+            PNG, JPG, GIF até 20MB cada
           </p>
           <input 
             ref={fileInputRef}
